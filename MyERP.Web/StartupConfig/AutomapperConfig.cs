@@ -6,7 +6,7 @@ namespace MyERP.Web.StartupConfig
 {
     public static class AutomapperConfig
     {
-        public static IServiceCollection AddAutoMapperWithProfiles(this IServiceCollection services)
+        public static IMapper RegisterAutomapper()
         {
             var mappingConfig = new MapperConfiguration(mc =>
             {
@@ -14,7 +14,7 @@ namespace MyERP.Web.StartupConfig
             });
 
             IMapper mapper = mappingConfig.CreateMapper();
-            return services.AddSingleton(mapper);
+            return mapper;
         }
     }
 }

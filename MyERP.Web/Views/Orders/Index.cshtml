@@ -1,0 +1,33 @@
+﻿@model IEnumerable<MyERP.Dtos.OrderDto>
+
+@{
+    ViewData["Title"] = "Orders Page";
+}
+
+<div class="text-center">
+    <h2 class="display-4">@ViewData["Title"]</h2>
+    <table class="table table-primary table-bordered">
+        <tr>
+            <th>Order ID</th>
+            <th>Order Date</th>
+            <th>Order Price</th>
+            <th></th>
+            <th></th>
+        </tr>
+        @foreach (var order in Model)
+        {
+            <tr>
+                <td>@order.Id</td>
+                <td>@order.Date.ToShortDateString()</td>
+                <td>@order.Price</td>
+                <td><a asp-action="Edit" asp-route-id="@order.Id">Edit</a></td>
+                <td><a asp-action="Delete" asp-route-id="@order.Id">Delete</a></td>
+            </tr>
+        }
+    </table>
+
+    <div>
+        <a class="btn btn-primary" asp-action="Create">Create</a>
+        <a class="btn btn-primary" asp-action="Report">Generate Report</a>
+    </div>
+</div>

@@ -6,6 +6,7 @@ using MyERP.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace MyERP.Application.Services
@@ -77,6 +78,15 @@ namespace MyERP.Application.Services
 
             await Repository.DeleteAsync(entityToDelete);
             return true;
+        }
+
+        public virtual async Task<List<TDto>> FilterAsync(Expression<Func<TEntity, bool>> predicate)
+        {
+            var suitableItems = await Repository.ListAsync(predicate);
+            var entityDtos = new List<TDto>(suitableItems.Count());
+            Mapper.Map(suitableItems, entityDtos);
+
+            return entityDtos;
         }
 
     }

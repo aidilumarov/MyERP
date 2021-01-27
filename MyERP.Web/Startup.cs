@@ -29,13 +29,11 @@ namespace MyERP.Web
             var connectionString = Configuration["ConnectionStrings:LocalDbMSSQLExpress"];
             services.AddDbContext<IApplicationDbContext, ApplicationDbContext>(
                 options => options.UseSqlServer(connectionString, b => b.MigrationsAssembly("MyERP.Infrastructure")));
-
-            services.AddAutoMapperWithProfiles();
         }
 
         public void ConfigureContainer(ContainerBuilder builder)
         {
-            builder.RegisterRequiredModules();
+            builder.RegisterModules();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -52,8 +50,6 @@ namespace MyERP.Web
             app.UseStaticFiles();
 
             app.UseRouting();
-
-            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

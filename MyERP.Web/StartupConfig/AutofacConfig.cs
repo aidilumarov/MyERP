@@ -10,7 +10,7 @@ namespace MyERP.Web.StartupConfig
 {
     public static class AutofacConfig
     {
-        public static ContainerBuilder RegisterRequiredModules(this ContainerBuilder builder)
+        public static ContainerBuilder RegisterModules(this ContainerBuilder builder)
         {
             builder.RegisterModule<InfrastructureModule>();
             builder.RegisterModule<ApplicationModule>();
