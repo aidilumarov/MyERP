@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyERP.Web", "MyERP.Web\MyER
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyERP.Entities", "MyERP.Entities\MyERP.Entities.csproj", "{C6C0F416-806D-400C-998A-657E48F14C70}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyERP.Dtos", "MyERP.Dtos\MyERP.Dtos.csproj", "{C02673A1-82E7-495F-95D0-9BFE2C1BA0FA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{C6C0F416-806D-400C-998A-657E48F14C70}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C6C0F416-806D-400C-998A-657E48F14C70}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C6C0F416-806D-400C-998A-657E48F14C70}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C02673A1-82E7-495F-95D0-9BFE2C1BA0FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C02673A1-82E7-495F-95D0-9BFE2C1BA0FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C02673A1-82E7-495F-95D0-9BFE2C1BA0FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C02673A1-82E7-495F-95D0-9BFE2C1BA0FA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
