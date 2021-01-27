@@ -8,6 +8,7 @@ using MyERP.Application.Repositories;
 using MyERP.Infrastructure.EFCore;
 using MyERP.Web.StartupConfig;
 using System;
+using Autofac;
 
 namespace MyERP.Web
 {
@@ -21,7 +22,7 @@ namespace MyERP.Web
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public IServiceProvider ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
 
@@ -30,7 +31,11 @@ namespace MyERP.Web
                 options => options.UseSqlServer(connectionString, b => b.MigrationsAssembly("MyERP.Infrastructure")));
 
             services.AddAutoMapperWithProfiles();
-            return services.GetAutofacServiceProviderWithRegisteredModules();
+        }
+
+        public void ConfigureContainer(ContainerBuilder builder)
+        {
+            builder.RegisterRequiredModules();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,5 +1,6 @@
 ﻿using System;
 using Autofac;
+using Autofac.Core.Registration;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using MyERP.Application;
@@ -9,18 +10,13 @@ namespace MyERP.Web.StartupConfig
 {
     public static class AutofacConfig
     {
-        public static IServiceProvider GetAutofacServiceProviderWithRegisteredModules(this IServiceCollection services)
+        public static ContainerBuilder RegisterRequiredModules(this ContainerBuilder builder)
         {
-            var builder = new ContainerBuilder();
-
             builder.RegisterModule<InfrastructureModule>();
             builder.RegisterModule<ApplicationModule>();
             builder.RegisterModule<WebModule>();
 
-            builder.Populate(services);
-            var container = builder.Build();
-
-            return new AutofacServiceProvider(container);
+            return builder;
         }
     }
 }

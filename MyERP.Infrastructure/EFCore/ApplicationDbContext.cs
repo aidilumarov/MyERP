@@ -14,5 +14,14 @@ namespace MyERP.Infrastructure.EFCore
         }
 
         public DbSet<Order> Orders { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.Entity<Order>().HasData(
+                new Order { Id = Guid.NewGuid(), Date = DateTime.Today, Price = 500 },
+                new Order { Id = Guid.NewGuid(), Date = DateTime.Today, Price = 500 },
+                new Order { Id = Guid.NewGuid(), Date = DateTime.Today, Price = 500}
+            );
+        }
     }
 }
