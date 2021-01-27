@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.EntityFrameworkCore;
+using MyERP.Application.Repositories;
+using MyERP.Infrastructure.EFCore;
 using MyERP.Web.StartupConfig;
 using System;
 
@@ -21,6 +24,11 @@ namespace MyERP.Web
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+
+            var connectionString = Configuration["ConnectionStrings:LocalDbMSSQLExpress"];
+            services.AddDbContext<IApplicationDbContext, ApplicationDbContext>(
+                options => options.UseSqlServer(connectionString, b => b.MigrationsAssembly("MyERP.Infrastructure")));
+
             services.AddAutoMapperWithProfiles();
             return services.GetAutofacServiceProviderWithRegisteredModules();
         }
