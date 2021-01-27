@@ -6,12 +6,11 @@
 
   <ItemGroup>
     <PackageReference Include="Autofac" Version="6.1.0" />
-    <PackageReference Include="AutoMapper" Version="10.1.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MyERP.Dtos\MyERP.Dtos.csproj" />
+    <ProjectReference Include="..\MyERP.Application\MyERP.Application.csproj" />
     <ProjectReference Include="..\MyERP.Entities\MyERP.Entities.csproj" />
   </ItemGroup>
 

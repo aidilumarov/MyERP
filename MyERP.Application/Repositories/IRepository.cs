@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MyERP.Application.Repositories
 {
-    interface IRepository<T> where T : BaseEntity
+    public interface IRepository<T> where T : BaseEntity
     {
         Task<T> GetByIdAsync(Guid id);
 
