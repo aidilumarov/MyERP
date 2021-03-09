@@ -12,8 +12,7 @@ namespace MyERP.Application
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<OrderService>().InstancePerLifetimeScope();
-            builder.RegisterType<ExcelReportWriter>().As<IReportWriter<OrderDto>>().SingleInstance();
+            builder.RegisterType<UserService>().InstancePerLifetimeScope();
         }
     }
 }

@@ -12,8 +12,6 @@ using System.Threading.Tasks;
 namespace MyERP.Application.Services
 {
     public class AbstractService<TDto, TEntity> 
-        where TDto : BaseDto
-        where TEntity : BaseEntity
     {
         protected readonly IRepository<TEntity> Repository;
         protected readonly IMapper Mapper;
@@ -32,7 +30,7 @@ namespace MyERP.Application.Services
             return entityDtos;
         }
 
-        public async Task<TDto> GetAsync(Guid id)
+        public async Task<TDto> GetAsync(int id)
         {
             var entity = await Repository.GetByIdAsync(id);
 
@@ -47,12 +45,17 @@ namespace MyERP.Application.Services
         public virtual async Task<TDto> CreateAsync(TDto entityDto)
         {
             var entity = Mapper.Map<TDto, TEntity>(entityDto);
-            await Repository.AddAsync(entity);
-            entityDto.Id = entity.Id;
+            await Repository.AddAsync(entity, true);
             return entityDto;
         }
 
-        public virtual async Task<TDto> UpdateAsync(Guid id, TDto entityDto)
+        public virtual async Task CreateRangeAsync(IEnumerable<TDto> entityDtos)
+        {
+            var entities = Mapper.Map<IEnumerable<TEntity>>(entityDtos);
+            await Repository.AddAsync(entities, true);
+        }
+
+        public virtual async Task<TDto> UpdateAsync(int id, TDto entityDto)
         {
             var entityToUpdate = await Repository.GetByIdAsync(id);
 
@@ -63,11 +66,10 @@ namespace MyERP.Application.Services
 
             Mapper.Map(entityDto, entityToUpdate);
             await Repository.EditAsync(entityToUpdate);
-            entityDto.Id = id;
-            return entityDto;
+            return Mapper.Map(entityToUpdate, entityDto);
         }
 
-        public virtual async Task<bool> DeleteAsync(Guid id)
+        public virtual async Task<bool> DeleteAsync(int id)
         {
             var entityToDelete = await Repository.GetByIdAsync(id);
 

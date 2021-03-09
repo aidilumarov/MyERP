@@ -9,6 +9,7 @@ using MyERP.Infrastructure.EFCore;
 using MyERP.Web.StartupConfig;
 using System;
 using Autofac;
+using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 
 namespace MyERP.Web
 {
@@ -29,6 +30,13 @@ namespace MyERP.Web
             var connectionString = Configuration["ConnectionStrings:LocalDbMSSQLExpress"];
             services.AddDbContext<IApplicationDbContext, ApplicationDbContext>(
                 options => options.UseSqlServer(connectionString, b => b.MigrationsAssembly("MyERP.Infrastructure")));
+
+            
+            services.AddSpaStaticFiles(configuration =>
+            {
+                configuration.RootPath = "../frontend/build";
+            });
+            
         }
 
         public void ConfigureContainer(ContainerBuilder builder)
@@ -45,9 +53,11 @@ namespace MyERP.Web
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler("/Error");
             }
-            app.UseStaticFiles();
+
+            //app.UseStaticFiles();
+            //app.UseSpaStaticFiles();
 
             app.UseRouting();
 
@@ -55,8 +65,20 @@ namespace MyERP.Web
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller}/{action=Index}/{id?}");
             });
+
+            
+            app.UseSpa(spa =>
+            {
+                spa.Options.SourcePath = "../frontend";
+
+                if (env.IsDevelopment())
+                {
+                    spa.UseReactDevelopmentServer(npmScript: "start");
+                }
+            });
+            
         }
     }
 }

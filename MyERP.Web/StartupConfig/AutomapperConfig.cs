@@ -10,7 +10,7 @@ namespace MyERP.Web.StartupConfig
         {
             var mappingConfig = new MapperConfiguration(mc =>
             {
-                mc.AddProfile<OrderMappingProfile>();
+                mc.AddProfile<UserMappingProfile>();
             });
 
             IMapper mapper = mappingConfig.CreateMapper();

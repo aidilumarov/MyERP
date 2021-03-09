@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace MyERP.Infrastructure.EFCore
 {
-    public class Repository<T> : IRepository<T> where T : BaseEntity
+    public class Repository<T> : IRepository<T> where T : class
     {
         private readonly IApplicationDbContext db;
 
@@ -19,57 +19,95 @@ namespace MyERP.Infrastructure.EFCore
             this.db = db;
         }
 
-        public virtual Task<T> GetByIdAsync(Guid id)
+        public async virtual Task<T> GetByIdAsync(int id)
         {
-            return db.Set<T>().FindAsync(id).AsTask();
+            return await db.Set<T>().FindAsync(id).AsTask();
         }
 
-        public virtual Task<List<T>> ListAsync()
+        public async virtual Task<List<T>> ListAsync()
         {
-            return db.Set<T>().ToListAsync();
+            return await db.Set<T>().ToListAsync();
         }
 
-        public virtual Task<List<T>> ListAsync(Expression<Func<T, bool>> predicate)
+        public virtual async Task<List<T>> ListAsync(Expression<Func<T, bool>> predicate)
         {
-            return db.Set<T>()
+            return await db.Set<T>()
                 .Where(predicate)
                 .ToListAsync();
         }
 
-        public async Task<T> AddAsync(T entity)
+        public async Task<T> AddAsync(T entity, bool identityInsert)
         {
-            db.Set<T>().Add(entity);
+            if (identityInsert)
+            {
+                using (var transaction = db.Database.BeginTransaction())
+                {
+                    SetIdentityInsertOn();
+                    await db.Set<T>().AddAsync(entity);
+                    await transaction.CommitAsync();
+                }
+            }
+            
+            else
+            {
+                await db.Set<T>().AddAsync(entity);
+            }
+
             await db.SaveChangesAsync();
             return entity;
         }
 
-        public Task AddAsync(params T[] entities)
+        public async Task AddAsync(IEnumerable<T> entities, bool identityInsert)
         {
-            db.Set<T>().AddRange(entities);
-            return db.SaveChangesAsync();
+            if (identityInsert)
+            {
+                using (var transaction = db.Database.BeginTransaction())
+                {
+                    SetIdentityInsertOn();
+                    await db.Set<T>().AddRangeAsync(entities);
+                    await db.SaveChangesAsync();
+                    await transaction.CommitAsync();
+                }
+            }
+            
+            else
+            {
+                await db.Set<T>().AddRangeAsync(entities);
+                await db.SaveChangesAsync();
+            }
         }
 
-        public Task DeleteAsync(T entity)
+        public async Task<int> DeleteAsync(T entity)
         {
             db.Set<T>().Remove(entity);
-            return db.SaveChangesAsync();
+            return await db.SaveChangesAsync();
         }
 
-        public Task DeleteAsync(params T[] entities)
+        public async Task<int> DeleteAsync(params T[] entities)
         {
             db.Set<T>().RemoveRange(entities);
-            return db.SaveChangesAsync();
+            return await db.SaveChangesAsync();
         }
 
-        public virtual Task EditAsync(T entity)
+        public virtual async Task<int> EditAsync(T entity)
         {
             db.Entry(entity).State = EntityState.Modified;
-            return db.SaveChangesAsync();
+            return await db.SaveChangesAsync();
         }
 
-        public virtual Task SaveAsync()
+        public virtual async Task<int> SaveAsync()
         {
-            return db.SaveChangesAsync();
+            return await db.SaveChangesAsync();
+        }
+
+        private void SetIdentityInsertOn()
+        {
+            db.Database.ExecuteSqlRaw($"SET IDENTITY_INSERT [dbo].[{typeof(T).Name}s] ON");
+        }
+
+        private void SetIdentityInsertOff()
+        {
+            db.Database.ExecuteSqlRaw($"SET IDENTITY_INSERT [dbo].[{typeof(T).Name}s] OFF");
         }
 
     }

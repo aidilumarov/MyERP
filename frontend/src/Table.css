@@ -1,0 +1,11 @@
+table, table th, table td {
+    border: 2px solid black;
+    border-collapse: collapse;
+    padding: 10px;
+}
+
+.centered {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
